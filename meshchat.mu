@@ -1212,7 +1212,7 @@ effective_limit, total_lines = calculate_effective_limit(log, MAX_LINES, MAX_CHA
 
 
 ########## Динамическое преобразование времени сервера UTC в локальное время ########## 
-from datetime import datetime
+from datetime import datetime, timezone
 
 def convert_log_time_to_local(log_time_str):
     # Parse log time - handle both [HH:MM] and [Day,HH:MM] formats
@@ -1230,7 +1230,7 @@ def convert_log_time_to_local(log_time_str):
         day_part = None
     
     # Get today's date
-    today = datetime.utcnow().date()
+    today = datetime.now(timezone.utc).date()
     
     # Parse as UTC
     utc_dt = datetime.strptime(f"{today} {time_part}", "%Y-%m-%d %H:%M")
