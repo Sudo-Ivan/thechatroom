@@ -35,4 +35,4 @@
 
 
 
-`Bfff`F000 Исходный код на GitHub: https://github.com/fr33n0w/thechatroom `b
+`Bfff`F000 Исходный код на GitHub: https://github.com/Sudo-Ivan/thechatroom `b
