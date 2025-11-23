@@ -1,0 +1,12 @@
+services:
+  thechatroom:
+    build: .
+    container_name: thechatroom
+    user: "1000:1000"
+    network_mode: host
+    security_opt:
+      - no-new-privileges:true
+#    volumes:
+#      - ./nomadnetwork:/app/nomadnetwork
+#      - ./.reticulum:/home/appuser/.reticulum
+    restart: unless-stopped
