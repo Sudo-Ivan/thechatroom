@@ -1,32 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 print("#!c=0")
-# ^^^^ <--> Nomadnet specific to prevent page caching, may change if you like.
 
-###################################################################################################################################
-##    Welcome To: THE CHATROOM! - v2.00 by F. - The First Reticulum / Nomadnet IRC-STYLE Chat - Nomadnet & Meshchat compatible!  ##
-##                                                                                                                               ##
-##                                                                                                                               ##
-##                          Full info on the official GitHub ReadMe: https://github.com/fr33n0w/thechatroom                      ##
-##                                                                                                                               ##
-##                            Come To Visit and Join The Original ChatRoom Nomadnet to see it in action:                         ##
-##                                  NomadNet Link: d251bfd8e30540b5bd219bbbfcc3afc5:/page/index.mu                               ##
-##                                                                                                                               ##
-##                                                                                                                               ##
-##  THIS NOMADNET PAGE PYTHON SCRIPT IS FREE AND OPEN SOURCE, PLEASE KEEP ORIGINAL LINKS INSIDE TO SUPPORT THE DEVELOPER'S WORK! ##
-################################################### ENJOY YOUR NEW CHATROOM! ######################################################
-
-######## IMPORT MODULES: ######## 
+######## ИМПОРТ МОДУЛЕЙ: ######## 
 import os, sys, json, time, random, re, sqlite3
 
-######## INITIALIZE LOG (LOCAL SYSTEM INFO MESSAGES) #####
+######## ИНИЦИАЛИЗАЦИЯ ЛОГА (ЛОКАЛЬНЫЕ СИСТЕМНЫЕ ИНФОРМАЦИОННЫЕ СООБЩЕНИЯ) #####
 log = []
 
-######## SYS & FILE PATHS ######## 
+######## СИСТЕМНЫЕ И ФАЙЛОВЫЕ ПУТИ ######## 
 DB_PATH = os.path.join(os.path.dirname(__file__), "chatusers.db")
 EMO_DB = os.path.join(os.path.dirname(__file__), "emoticons.txt")
 
-######## DB CREATION IF MISSING (on first start usually) ######
+######## СОЗДАНИЕ БД ЕСЛИ ОТСУТСТВУЕТ (обычно при первом запуске) ######
 if not os.path.exists(DB_PATH):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -41,15 +27,15 @@ if not os.path.exists(DB_PATH):
     conn.commit()
     conn.close()
 
-######## DISPLAY LIMIT SETTINGS: ######## (Keeps UI fixed in the meshchat browser)
-MAX_CHARS = 160  # Adjust as needed to split messages after N chars, 160 default for nomadnet
-MAX_LINES = 28   # Max lines on screen, for Meshchat 
-DISPLAY_LIMIT = 36 # Max lines on screen , for Nomadnet
+######## НАСТРОЙКИ ЛИМИТА ОТОБРАЖЕНИЯ: ######## (Сохраняет интерфейс фиксированным в браузере meshchat)
+MAX_CHARS = 160  # Настройте по необходимости для разбиения сообщений после N символов, 160 по умолчанию для nomadnet
+MAX_LINES = 28   # Максимум строк на экране, для Meshchat 
+DISPLAY_LIMIT = 36 # Максимум строк на экране, для Nomadnet
 
-######## MASTER SYSADMIN SETTINGS ######## (USE COMPLEX NICKNAMES FOR THE SYSADMINS!)
-SYSADMIN = "setyouradminlognamehere" # SET YOUR MASTER ADMIN NICKNAME FOR CHAT ADMIN COMMANDS
+######## НАСТРОЙКИ ГЛАВНОГО СИСТЕМНОГО АДМИНИСТРАТОРА ######## (ИСПОЛЬЗУЙТЕ СЛОЖНЫЕ НИКНЕЙМЫ ДЛЯ СИСТЕМНЫХ АДМИНИСТРАТОРОВ!)
+SYSADMIN = "setyouradminlognamehere" # УСТАНОВИТЕ ВАШ НИКНЕЙМ ГЛАВНОГО АДМИНИСТРАТОРА ДЛЯ АДМИНИСТРАТИВНЫХ КОМАНД ЧАТА
 
-######## UI Unicode Emojis: ######## 
+######## ЭМОДЗИ ИНТЕРФЕЙСА UNICODE: ######## 
 user_icon = "\U0001F464" # "\U0001F464" # "\U0001F465" - "\U0001FAAA"
 message_icon = "\U0001F4AC" 
 msg2_icon = "\u2709\ufe0f"
@@ -62,7 +48,7 @@ nickset_icon = "\U0001F504"
 info_icon = "\u1F6C8"
 stats_icon = "\u1F4DD"
 
-######## Antispam filters: ######## (Add or remove what you want to allow or not)
+######## Фильтры антиспама: ######## (Добавьте или удалите то, что хотите разрешить или запретить)
 spam_patterns = [
     r"buy\s+now",
     r"free\s+money",
@@ -146,13 +132,13 @@ spam_patterns = [
 
 ]
 
-################### Nickname Auto-Color System ##################### (Change colors to your preferences)
+################### Система автоматической окраски никнеймов ##################### (Измените цвета по вашим предпочтениям)
 colors = [ "B900", "B090", "B009", "B099", "B909", "B066", "B933", "B336", "B939", "B660", "B030", "B630", "B363", "B393", "B606", "B060", "B003", "B960", "B999", "B822", "B525", "B255", "B729", "B279", "B297", "B972", "B792", "B227", "B277", "B377", "B773", "B737", "B003", "B111", "B555", "B222", "B088", "B808", "B180" ]
 def get_color(name):
     return colors[sum(ord(c) for c in name.lower()) % len(colors)]
 
 
-#########  Recover input from Os Environment variables ######## 
+#########  Восстановление ввода из переменных окружения ОС ######## 
 def recover_input(key_suffix):
     for k, v in os.environ.items():
         if k.lower().endswith(key_suffix):
@@ -165,7 +151,7 @@ remote_identity  = recover_input("remote_identity")
 nickname         = recover_input("field_username")
 dest             = recover_input("dest")
 
-# Fallback to command-line arguments if needed
+# Резервный вариант: аргументы командной строки при необходимости
 if not raw_username and len(sys.argv) > 1:
     raw_username = sys.argv[1].strip()
 if not message and len(sys.argv) > 2:
@@ -173,11 +159,11 @@ if not message and len(sys.argv) > 2:
 if not dest and len(sys.argv) > 3:
     dest = sys.argv[3].strip()
 
-# Extract hash code from remote identity and LXMF address
+# Извлечение хэш-кода из удалённой идентичности и адреса LXMF
 hash_code = remote_identity[-4:] if remote_identity else ""
 dest_code = dest[-4:] if dest else ""
 
-# Smart fallback for display name with logging
+# Умный резервный вариант для отображаемого имени с логированием
 if nickname:
     display_name = nickname
 elif dest:
@@ -185,7 +171,7 @@ elif dest:
 else:
     display_name = "Guest"
 
-# sql db nick binding and recovering
+# Привязка никнейма к SQL БД и восстановление
 
 def init_db():
     conn = sqlite3.connect(DB_PATH)
@@ -237,7 +223,7 @@ remote_identity = os.getenv("remote_identity", "").strip()
 # Try to load display_name from DB
 db_display_name = get_display_name_from_db(dest)
 
-# Determine final display_name with logging
+# Определение финального display_name с логированием
 nickname_recovered_from_db = False
 
 if nickname:
@@ -245,7 +231,7 @@ if nickname:
     log.append({
         "time": time.strftime("[%a,%H:%M]"),
         "user": "System",
-        "text": f"`!` Nickname recovered from environment: {display_name} `!`"
+        "text": f"`!` Никнейм восстановлен из окружения: {display_name} `!`"
     })
 elif db_display_name:
     display_name = db_display_name
@@ -253,24 +239,24 @@ elif db_display_name:
     log.append({
         "time": time.strftime("[%a,%H:%M]"),
         "user": "System",
-        "text": f"`!` Nickname recovered from database: {display_name} `!`"
+        "text": f"`!` Никнейм восстановлен из базы данных: {display_name} `!`"
     })
 elif dest:
     display_name = f"Guest_{dest[-4:]}"
     log.append({
         "time": time.strftime("[%a,%H:%M]"),
         "user": "System",
-        "text": f"`!` No nickname found. Using fingerprint: {display_name} `!`"
+        "text": f"`!` Никнейм не найден. Используется отпечаток: {display_name} `!`"
     })
 else:
     display_name = "Guest"
     log.append({
         "time": time.strftime("[%a,%H:%M]"),
         "user": "System",
-        "text": "`!` No nickname or fingerprint found. Defaulting to Guest `!`"
+        "text": "`!` Никнейм или отпечаток не найдены. Используется по умолчанию: Guest `!`"
     })
 
-# Save user to DB if valid
+# Сохранение пользователя в БД если валидно
 save_user_to_db(remote_identity, dest, display_name)
 
 # -----------------------------------------------
@@ -286,15 +272,15 @@ safe_username = (
     .replace("$", "").replace(" ", "").strip() or "Guest"
 )
 
-# Chat Topic functions
+# Функции темы чата
 topic_file = os.path.join(os.path.dirname(__file__), "topic.json")
 try:
     with open(topic_file, "r") as tf:
         topic_data = json.load(tf)
-        topic_text = topic_data.get("text", "Welcome to the chatroom!")
+        topic_text = topic_data.get("text", "Добро пожаловать в чат!")
         topic_author = topic_data.get("user", "System")
 except:
-    topic_text = "Welcome to the chatroom!"
+    topic_text = "Добро пожаловать в чат!"
     topic_author = "System"
 
 
@@ -304,74 +290,74 @@ debug = []
 try:
     with open(log_file, "r") as f:
         log = json.load(f)
-        debug.append(f" Total {len(log)} messages")
+        debug.append(f" Всего {len(log)} сообщений")
 except Exception as e:
     log = []
-    debug.append(f"Failed to load log: {e}")
+    debug.append(f"Ошибка загрузки лога: {e}")
 
-# USER COMMANDS LOGIC:
+# ЛОГИКА КОМАНД ПОЛЬЗОВАТЕЛЯ:
 cmd = message.strip().lower()
 
 
-##### ADMIN COMMANDS #####
+##### АДМИНИСТРАТИВНЫЕ КОМАНДЫ #####
 if safe_username == SYSADMIN and cmd.startswith("/clear"):
     parts = cmd.split()
 
     if len(parts) == 1:
-        # /clear ? remove last message
+        # /clear ? удалить последнее сообщение
         if log:
             removed = log.pop()
-            debug.append(f"Removed last message: <{removed['user']}> {removed['text']}")
+            debug.append(f"Удалено последнее сообщение: <{removed['user']}> {removed['text']}")
         else:
-            debug.append("No messages to clear.")
+            debug.append("Нет сообщений для очистки.")
 
     elif len(parts) == 2 and parts[1].isdigit():
-        # /clear N ? remove last N messages
+        # /clear N ? удалить последние N сообщений
         count = int(parts[1])
         removed_count = 0
         while log and removed_count < count:
             removed = log.pop()
-            debug.append(f"Removed: <{removed['user']}> {removed['text']}")
+            debug.append(f"Удалено: <{removed['user']}> {removed['text']}")
             removed_count += 1
-        debug.append(f"Cleared last {removed_count} messages.")
+        debug.append(f"Очищено последних {removed_count} сообщений.")
 
     elif len(parts) == 3 and parts[1] == "user":
-        # /clear user NICKNAME ? remove all messages from that user
+        # /clear user NICKNAME ? удалить все сообщения от этого пользователя
         target_user = parts[2]
         original_len = len(log)
         log[:] = [msg for msg in log if msg.get("user") != target_user]
         removed_count = original_len - len(log)
-        debug.append(f"Cleared {removed_count} messages from user '{target_user}'.")
+        debug.append(f"Очищено {removed_count} сообщений от пользователя '{target_user}'.")
 
     else:
-        debug.append("Invalid /clear syntax. Use /clear, /clear N, or /clear user NICKNAME.")
+        debug.append("Неверный синтаксис /clear. Используйте /clear, /clear N или /clear user NICKNAME.")
 
-    # Save updated log
+    # Сохранение обновлённого лога
     try:
         with open(log_file, "w", encoding="utf-8") as f:
             json.dump(log, f, indent=2, ensure_ascii=False)
-        debug.append("Log updated after clearing.")
+        debug.append("Лог обновлён после очистки.")
     except Exception as e:
-        debug.append(f"Clear command error: {e}")
+        debug.append(f"Ошибка команды Clear: {e}")
 
 elif safe_username == SYSADMIN and cmd == "/clearall":
     if log:
         log.clear()
-        debug.append("All messages cleared by admin.")
+        debug.append("Все сообщения очищены администратором.")
         try:
             with open(log_file, "w", encoding="utf-8") as f:
                 json.dump(log, f, indent=2, ensure_ascii=False)
-            debug.append("Log successfully emptied.")
+            debug.append("Лог успешно очищен.")
         except Exception as e:
-            debug.append(f"ClearAll error: {e}")
+            debug.append(f"Ошибка ClearAll: {e}")
     else:
-        debug.append("Log already empty. Nothing to clear.")
+        debug.append("Лог уже пуст. Нечего очищать.")
 
 
 
-########## CHAT USERS COMMANDS #########
+########## КОМАНДЫ ПОЛЬЗОВАТЕЛЕЙ ЧАТА #########
 
-#### STATS COMMAND ####
+#### КОМАНДА STATS ####
 elif cmd == "/stats":
     user_stats = {}
     user_set = set()
@@ -384,73 +370,73 @@ elif cmd == "/stats":
     total_messages = len(log)
     top_users = sorted(user_stats.items(), key=lambda x: x[1], reverse=True)
 
-    # Prepare lines
-    log.append({"time": time.strftime("[%a,%H:%M]"), "user": "System", "text": "`!` Stats Report: `!` "})
-    log.append({"time": time.strftime("[%a,%H:%M]"), "user": "System", "text": f"`!` Total messages: {total_messages} `!` "})
-    log.append({"time": time.strftime("[%a,%H:%M]"), "user": "System", "text": f"`!` Total users: {total_users} `!` "})
+    # Подготовка строк
+    log.append({"time": time.strftime("[%a,%H:%M]"), "user": "System", "text": "`!` Отчёт статистики: `!` "})
+    log.append({"time": time.strftime("[%a,%H:%M]"), "user": "System", "text": f"`!` Всего сообщений: {total_messages} `!` "})
+    log.append({"time": time.strftime("[%a,%H:%M]"), "user": "System", "text": f"`!` Всего пользователей: {total_users} `!` "})
     
-    # Combine top chatters in one line
-    top_line = "`!` Top chatters: `!` " + " , ".join([f"`!` {user} ({count} msg) `!`" for user, count in top_users[:5]])
+    # Объединение топ участников в одну строку
+    top_line = "`!` Топ участников: `!` " + " , ".join([f"`!` {user} ({count} сообщ.) `!`" for user, count in top_users[:5]])
     log.append({"time": time.strftime("[%a,%H:%M]"), "user": "System", "text": top_line})
 
-############ /users COMMAND ##############
+############ КОМАНДА /users ##############
 elif cmd == "/users":
-    # Count messages per user
+    # Подсчёт сообщений на пользователя
     from collections import Counter
     user_counts = Counter(msg["user"] for msg in log if msg["user"] != "System")
 
-    # Sort by most active
+    # Сортировка по активности
     sorted_users = sorted(user_counts.items(), key=lambda x: -x[1])
     total_users = len(sorted_users)
 
-    # Header line
+    # Заголовок
     log.append({
         "time": time.strftime("[%a,%H:%M]"),
         "user": "System",
-        "text": f"`!` Active Users List and Stats, Total Users: ({total_users}) `! "
+        "text": f"`!` Список активных пользователей и статистика, Всего пользователей: ({total_users}) `! "
     })
 
-    # Show in chunks of N with message counts
+    # Показать частями по N с количеством сообщений
     for i in range(0, total_users, 7):
-        chunk = ", ".join(f"`!` {user} `!({count}msg)" for user, count in sorted_users[i:i+7])
+        chunk = ", ".join(f"`!` {user} `!({count}сообщ.)" for user, count in sorted_users[i:i+7])
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
             "text": chunk
         })
 
-############# /cmd COMMAND INFO LINES ############
+############# СТРОКИ ИНФОРМАЦИИ КОМАНДЫ /cmd ############
 elif cmd == "/cmd":
     help_lines = [
-        f"`!{message_icon} THE CHATROOM!{message_icon}  \\  EXTENDED USER COMMANDS INFO:`!",
-        f"`!GENERAL USE AND INFORMATIONAL COMMANDS:`!",
-        f"`!/info`! :  Show The Chat Room! Informations, Usage and Disclaimer",
-        f"`!/cmd`! : Show all the available user commands",
-        f"`!/stats`! : Show chatroom statistics, including Top 5 Chatters",
-        f"`!/users`! : List all chatroom users",
-        f"`!/version`! : Show THE CHAT ROOM! script version, news and infos",
+        f"`!{message_icon} THE CHATROOM!{message_icon}  \\  РАСШИРЕННАЯ ИНФОРМАЦИЯ О КОМАНДАХ ПОЛЬЗОВАТЕЛЯ:`!",
+        f"`!ОБЩИЕ И ИНФОРМАЦИОННЫЕ КОМАНДЫ:`!",
+        f"`!/info`! :  Показать информацию о The Chat Room!, использование и отказ",
+        f"`!/cmd`! : Показать все доступные команды пользователя",
+        f"`!/stats`! : Показать статистику чата, включая Топ-5 участников",
+        f"`!/users`! : Список всех пользователей чата",
+        f"`!/version`! : Показать версию скрипта THE CHAT ROOM!, новости и информацию",
 
-        f"`! {cmd_icon} INTERACTIVE CHAT COMMANDS`!",
-        "`!/lastseen <username>`!`: Last seen user info and latest user message",
-        "`!/topic`!` : Show or Change Room Topic, usage: '/topic' or '/topic Your New Topic Here' ",
-        "`!/search <keyword(s)>`!` : Search for keywords in the full chatlog ",
-        "`!/time`!` : Show current Chat Server Time (UTC)",
-        "`!/ping`!` : Reply with PONG! if the chat system is up and working",
-        "`!/meteo <cityname>`! : Get weather info for your city, example: /meteo Miami",
+        f"`! {cmd_icon} ИНТЕРАКТИВНЫЕ КОМАНДЫ ЧАТА`!",
+        "`!/lastseen <username>`!`: Информация о последнем появлении пользователя и последнее сообщение пользователя",
+        "`!/topic`!` : Показать или изменить тему комнаты, использование: '/topic' или '/topic Ваша новая тема здесь' ",
+        "`!/search <keyword(s)>`!` : Поиск ключевых слов в полном логе чата ",
+        "`!/time`!` : Показать текущее время сервера чата (UTC)",
+        "`!/ping`!` : Ответить PONG! если система чата работает",
+        "`!/meteo <cityname>`! : Получить информацию о погоде для вашего города, пример: /meteo Москва",
         "--------------------------------------",
-        f"`! {cmd_icon} SOCIAL INTERACTIONS COMMANDS`!",
-        "`!` /e`!` : Sends randomized emojis from the internal emoji list",
-        "`!` /c <text message>`!` : Sends a colored chat message with randomized background and font colors",
-        "`!` @nickname`!` : Sends a colored mention to highlight the mentioned user in a reply message",
-        "`!` $e`!` : Sends a random emoticon using '$e', usable in every part of the message. ",
-        "`!` $link`!` : Higlight your links, example: $link d251bfd8e30540b5bd219bbbfcc3afc5:/page/index.mu ",
-        "`!` /welcome`! : Sends a welcome message. Usage: /welcome or /welcome <nickname>. ",
-        f"`!` {cmd_icon} USER STATUS INTERACTIONS COMMANDS`!`",
+        f"`! {cmd_icon} КОМАНДЫ СОЦИАЛЬНОГО ВЗАИМОДЕЙСТВИЯ`!",
+        "`!` /e`!` : Отправляет случайные эмодзи из внутреннего списка эмодзи",
+        "`!` /c <текстовое сообщение>`!` : Отправляет цветное сообщение чата со случайными цветами фона и шрифта",
+        "`!` @nickname`!` : Отправляет цветное упоминание для выделения упомянутого пользователя в ответном сообщении",
+        "`!` $e`!` : Отправляет случайный эмотикон используя '$e', можно использовать в любой части сообщения. ",
+        "`!` $link`!` : Выделить ваши ссылки, пример: $link d251bfd8e30540b5bd219bbbfcc3afc5:/page/index.mu ",
+        "`!` /welcome`! : Отправляет приветственное сообщение. Использование: /welcome или /welcome <nickname>. ",
+        f"`!` {cmd_icon} КОМАНДЫ СТАТУСА ПОЛЬЗОВАТЕЛЯ`!`",
         "`!` /hi, /bye, /brb, /lol, /exit, /quit, /away, /back, /notice `!`",
-        "`!` Commands Usage Example:  /hi OR /hi Hello World! `! (Syntax is valid for all the above commands!)",
+        "`!` Пример использования команд:  /hi ИЛИ /hi Привет Мир! `! (Синтаксис действителен для всех вышеперечисленных команд!)",
         "--------------------------------------",
-        f"`!` {cmd_icon} ADMIN COMMANDS INFO: /admincmd (Only admins allowed to perform this command) `!`",
-        "`!` --------- END OF COMMAND LIST: `[CLICK TO RELOAD THE PAGE`:/page/nomadnet.mu`username]` --------- `!",
+        f"`!` {cmd_icon} ИНФОРМАЦИЯ ОБ АДМИНИСТРАТИВНЫХ КОМАНДАХ: /admincmd (Только администраторам разрешено выполнять эту команду) `!`",
+        "`!` --------- КОНЕЦ СПИСКА КОМАНД: `[НАЖМИТЕ ДЛЯ ПЕРЕЗАГРУЗКИ СТРАНИЦЫ`:/page/nomadnet.mu`username]` --------- `!",
 
     ]
     for line in help_lines:
@@ -460,19 +446,19 @@ elif cmd == "/cmd":
             "text": line
         })
 
-######## /admincmd admin command ######## 
+######## АДМИНИСТРАТИВНАЯ КОМАНДА /admincmd ######## 
 elif cmd == "/admincmd":
     if safe_username == SYSADMIN:
         admin_lines = [
-            f"`! {cmd_icon} ADMIN COMMANDS INFO `!",
-            "`! You have access to restricted administrative functions.`!",
-            "`! /clear `! : Deletes last message from the chatroom and database permanently",
-            "`! /clear N`! : Deletes last N messages from the chatroom and database permanently, example: /clear 3",
-            "`! /clear user <nickname>`! : Delete all messages from a specified user permanently",
-            "`! /clearall  `! : Permanently clear the whole chatroom log and database (Irreversible: use with caution!)",
-            "`! /backup `! : Creates a full chat_log.json database backup in the same chatroom script folder",
+            f"`! {cmd_icon} ИНФОРМАЦИЯ ОБ АДМИНИСТРАТИВНЫХ КОМАНДАХ `!",
+            "`! У вас есть доступ к ограниченным административным функциям.`!",
+            "`! /clear `! : Удаляет последнее сообщение из чата и базы данных навсегда",
+            "`! /clear N`! : Удаляет последние N сообщений из чата и базы данных навсегда, пример: /clear 3",
+            "`! /clear user <nickname>`! : Удалить все сообщения от указанного пользователя навсегда",
+            "`! /clearall  `! : Навсегда очистить весь лог чата и базу данных (Необратимо: используйте с осторожностью!)",
+            "`! /backup `! : Создаёт полную резервную копию базы данных chat_log.json в той же папке скрипта чата",
             "--------------------------------------",
-            "`! END OF ADMIN COMMANDS LIST `!"
+            "`! КОНЕЦ СПИСКА АДМИНИСТРАТИВНЫХ КОМАНД `!"
         ]
         for line in admin_lines:
             log.append({
@@ -484,70 +470,70 @@ elif cmd == "/admincmd":
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": "`! ERROR: You do not have permission to use /admincmd. This command is restricted to SYSADMYN.`!"
+            "text": "`! ОШИБКА: У вас нет разрешения на использование /admincmd. Эта команда ограничена для SYSADMIN.`!"
         })
 
-######### /backup admin command ########
+######### АДМИНИСТРАТИВНАЯ КОМАНДА /backup ########
 elif cmd == "/backup":
     if safe_username == SYSADMIN:
         try:
-            # Create timestamped backup filename in the same directory
+            # Создание имени файла резервной копии с временной меткой в той же директории
             timestamp = time.strftime("%Y%m%d_%H%M%S")
             backup_file = os.path.join(os.path.dirname(__file__), f"chat_log_backup_{timestamp}.json")
 
-            # Perform the backup
+            # Выполнение резервной копии
             import shutil
             shutil.copy(log_file, backup_file)
 
             log.append({
                 "time": time.strftime("[%a,%H:%M]"),
                 "user": "System",
-                "text": f"`! Backup successful: {backup_file}`!"
+                "text": f"`! Резервная копия успешна: {backup_file}`!"
             })
         except Exception as e:
             log.append({
                 "time": time.strftime("[%a,%H:%M]"),
                 "user": "System",
-                "text": f"`! ERROR: Backup failed. Reason: {str(e)}`!"
+                "text": f"`! ОШИБКА: Резервная копия не удалась. Причина: {str(e)}`!"
             })
     else:
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": "`! ERROR: You do not have permission to use /backup - This command is restricted to SYSADMIN.`!"
+            "text": "`! ОШИБКА: У вас нет разрешения на использование /backup - Эта команда ограничена для SYSADMIN.`!"
         })
 
 
-######## INFO COMMAND ######### (Change info with your preferences)
+######## КОМАНДА INFO ######### (Измените информацию по вашим предпочтениям)
 elif cmd == "/info":
     info_lines = [
-        "`! The Chat Room v2.00 Info - Overview - Usage - Commands - Disclaimer - README! :) `!",
-        "Welcome! This space is designed to connect people through an old school irc-styled interface.",
-        "No registration required, set your nickname and you are ready to message with other users.",
-        "Nicknames are randomly colorized and there is persistent color for every nickname.",
-        "No privacy compromission: use any nick you want. Nothing is recorded or associated to your rns identity.",
-        "This runs on a Nomadnet, so it will be visible internationally. Respect all the user languages in chat.",
-        "This chat is based on micron, sql3 db and python components.",
-        "You can send irc-style messages and use various commands to explore the chatroom.",
-        "`!` Command Reference `!`",
-        "Just Some Examples:",
-        "/users : show active users and message counts",
-        "/lastseen <username> : check a user's recent activity",
-        "/topic : show or change the room topic",
-        "/stats : show chat stats including top chatters",
-        "`!` Use /cmd to view the full list of available commands. `!`",
-        "`!` Technical Notes `!`",
-        "Due to micron limitations, the chatroom does not refresh automatically.",
-        "To see new incoming messages, reload the page using the provided link buttons.",
-        "Especially on Nomadnet: Reload using the provided link in the bottom bar to avoid duplicate messages!",
-        "Refreshing the page using meshchat browser function will remove nickname persistance, so use our Reload button",
-        "To have a nickname persistency, use the Meshchat v2.+ Fingerprint Button to save and recall (lxmf binding).",
-        "The main chatroom shows the last ~30 messages; use the button at the bottom to view the full chat log.",
-        "`!` DISCLAIMER `!`",
-        "This chatroom is a space for connection, collaboration, and respectful interaction.",
-        "Rude, offensive, or inappropriate behavior is not tolerated. Messages may be deleted.",
-        "Suspension or message deletion can occur without prior warning in serious or repeated cases.",
-        "`!` BEFORE FREE SPECH, COMES RESPECT! - WELCOME TO >>THE CHAT ROOM!<< `!`"           
+        "`! Информация о The Chat Room v2.00 - Обзор - Использование - Команды - Отказ - README! :) `!",
+        "Добро пожаловать! Это пространство предназначено для соединения людей через интерфейс в старом стиле IRC.",
+        "Регистрация не требуется, установите ваш никнейм и вы готовы общаться с другими пользователями.",
+        "Никнеймы случайно окрашиваются и для каждого никнейма есть постоянный цвет.",
+        "Без компромиссов приватности: используйте любой никнейм. Ничего не записывается и не связывается с вашей rns идентичностью.",
+        "Это работает на Nomadnet, поэтому будет видно международно. Уважайте все языки пользователей в чате.",
+        "Этот чат основан на компонентах micron, sql3 db и python.",
+        "Вы можете отправлять сообщения в стиле IRC и использовать различные команды для изучения чата.",
+        "`!` Справочник команд `!`",
+        "Просто несколько примеров:",
+        "/users : показать активных пользователей и количество сообщений",
+        "/lastseen <username> : проверить недавнюю активность пользователя",
+        "/topic : показать или изменить тему комнаты",
+        "/stats : показать статистику чата включая топ участников",
+        "`!` Используйте /cmd для просмотра полного списка доступных команд. `!`",
+        "`!` Технические заметки `!`",
+        "Из-за ограничений micron, чат не обновляется автоматически.",
+        "Чтобы увидеть новые входящие сообщения, перезагрузите страницу используя предоставленные кнопки ссылок.",
+        "Особенно на Nomadnet: Перезагрузите используя предоставленную ссылку в нижней панели чтобы избежать дублирующихся сообщений!",
+        "Обновление страницы используя функцию браузера meshchat удалит постоянство никнейма, поэтому используйте нашу кнопку Reload",
+        "Чтобы иметь постоянство никнейма, используйте кнопку Fingerprint в Meshchat v2.+ для сохранения и восстановления (привязка lxmf).",
+        "Основной чат показывает последние ~30 сообщений; используйте кнопку внизу для просмотра полного лога чата.",
+        "`!` ОТКАЗ `!`",
+        "Этот чат - пространство для связи, сотрудничества и уважительного взаимодействия.",
+        "Грубое, оскорбительное или неуместное поведение не допускается. Сообщения могут быть удалены.",
+        "Приостановка или удаление сообщений может произойти без предварительного предупреждения в серьёзных или повторяющихся случаях.",
+        "`!` ПЕРЕД СВОБОДОЙ СЛОВА ИДЁТ УВАЖЕНИЕ! - ДОБРО ПОЖАЛОВАТЬ В >>THE CHAT ROOM!<< `!`"           
     ]
 
     for line in info_lines:
@@ -557,11 +543,11 @@ elif cmd == "/info":
             "text": line
         })
 
-############ TIME COMMAND ###############
+############ КОМАНДА TIME ###############
 elif cmd == "/time":
     from datetime import datetime
     server_time = datetime.utcnow().strftime("%A, %B %d, %Y at %H:%M:%S UTC")
-    time_text = f"Current server time: {server_time}"
+    time_text = f"Текущее время сервера: {server_time}"
     log.append({"time": time.strftime("[%a,%H:%M]"), "user": "System", "text": time_text})
 
 ########## VERSION COMMAND #########  EDIT FOR YOUR LOCAL SETTINGS!
@@ -592,18 +578,18 @@ elif cmd == "/version":
         })
 
 
-######## LASTSEEN COMMAND ########
+######## КОМАНДА LASTSEEN ########
 elif cmd.startswith("/lastseen "):
     target_user = cmd[10:].strip()
     last = next((msg for msg in reversed(log) if msg["user"] == target_user), None)
-    seen_text = f"Last seen {target_user} at {last['time']}: {last['text']}" if last else f"No record of user '{target_user}'."
+    seen_text = f"Последний раз видели {target_user} в {last['time']}: {last['text']}" if last else f"Нет записей о пользователе '{target_user}'."
     log.append({"time": time.strftime("[%a,%H:%M]"), "user": "System", "text": seen_text})
 
-######## TOPIC COMMAND ######## 
+######## КОМАНДА TOPIC ######## 
 elif cmd.startswith("/topic "):
     new_topic = message[7:].replace("`", "").strip()
     if new_topic:
-        trimmed_topic = new_topic[:70]  # limit to N characters
+        trimmed_topic = new_topic[:70]  # ограничение до N символов
         timestamp = time.strftime("%d %B %Y")
         topic_data = {"text": trimmed_topic, "user": safe_username, "time": timestamp}
         try:
@@ -612,21 +598,21 @@ elif cmd.startswith("/topic "):
             log.append({
                 "time": time.strftime("[%a,%H:%M]"),
                 "user": "System",
-                "text": f"Topic set by {safe_username} on {timestamp}: {trimmed_topic} , Reload The Page!"
+                "text": f"Тема установлена {safe_username} {timestamp}: {trimmed_topic} , Перезагрузите страницу!"
             })
         except Exception as e:
-            debug.append(f"Topic update error: {e}")
+            debug.append(f"Ошибка обновления темы: {e}")
     else:
-        debug.append("No topic text provided.")
+        debug.append("Текст темы не предоставлен.")
 
 elif cmd == "/topic":
     log.append({
         "time": time.strftime("[%a,%H:%M]"),
         "user": "System",
-        "text": f"Current Topic: {topic_text} (set by {topic_author} on {topic_data.get('time')})"
+        "text": f"Текущая тема: {topic_text} (установлена {topic_author} {topic_data.get('time')})"
     })
 
-######## SEARCH COMMAND ######## 
+######## КОМАНДА SEARCH ######## 
 elif cmd.startswith("/search"):
     search_input = message[8:].strip().lower()
 
@@ -634,7 +620,7 @@ elif cmd.startswith("/search"):
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": "`!` Error! Command Usage: /search <keywords> - Please provide one or more keywords! `!`"
+            "text": "`!` Ошибка! Использование команды: /search <ключевые слова> - Пожалуйста, укажите одно или несколько ключевых слов! `!`"
         })
     else:
         keywords = search_input.split()
@@ -650,7 +636,7 @@ elif cmd.startswith("/search"):
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": f"`!` Search Results for: '{search_input}' - {len(matches)} match(es) found. `!`"
+            "text": f"`!` Результаты поиска для: '{search_input}' - найдено совпадений: {len(matches)}. `!`"
         })
 
         for match in matches[:10]:
@@ -664,15 +650,15 @@ elif cmd.startswith("/search"):
             log.append({
                 "time": time.strftime("[%a,%H:%M]"),
                 "user": "System",
-                "text": "`!` Showing first 10 results. Refine your search for more specific matches. `!`"
+                "text": "`!` Показаны первые 10 результатов. Уточните поиск для более конкретных совпадений. `!`"
             })
 
-######## PING COMMAND ######## 
+######## КОМАНДА PING ######## 
 elif cmd == "/ping":
     log.append({
         "time": time.strftime("[%a,%H:%M]"),
         "user": "System",
-        "text": "PONG! (System is up and working!)"
+        "text": "PONG! (Система работает!)"
     })
 
 #########  /e RANDOM EMOJIS COMMAND ######## 
@@ -760,20 +746,20 @@ elif cmd.startswith("/c "):
     else:
         debug.append("Error: Color command skipped due to missing message or username.")
 
-###### /HI COMMAND #######
+###### КОМАНДА /HI #######
 elif cmd.startswith("/hi"):
     try:
         parts = cmd.split(" ", 1)
         user_message = parts[1].strip() if len(parts) > 1 else ""
         timestamp = time.strftime("[%a,%H:%M]")
-        # Get color code for nickname
+        # Получить цветовой код для никнейма
         nickname_color = get_color(safe_username)
-        # Format nickname using your markup style
+        # Форматировать никнейм используя ваш стиль разметки
         colored_nickname = f"`{nickname_color}{safe_username}`b"
-        # Build message
-        base_text = f"{colored_nickname} has joined The Chat Room!"
+        # Построить сообщение
+        base_text = f"{colored_nickname} присоединился к Чату!"
         if user_message:
-            full_text = f" `!{base_text} Message: {user_message} `!"
+            full_text = f" `!{base_text} Сообщение: {user_message} `!"
         else:
             full_text = f" `!{base_text} `!"
         log.append({
@@ -787,7 +773,7 @@ elif cmd.startswith("/hi"):
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": f"`!` Error processing /hi command: {e} `!`"
+            "text": f"`!` Ошибка обработки команды /hi: {e} `!`"
         })
 
 ###### /BYE COMMAND #######
@@ -801,9 +787,9 @@ elif cmd.startswith("/bye"):
         # Format nickname using your markup style
         colored_nickname = f"`{nickname_color}{safe_username}`b"
         # Build message
-        base_text = f"{colored_nickname} is leaving The Chat Room!"
+        base_text = f"{colored_nickname} покидает Чат!"
         if user_message:
-            full_text = f" `!{base_text} Message: {user_message} `!"
+            full_text = f" `!{base_text} Сообщение: {user_message} `!"
         else:
             full_text = f" `!{base_text} `!"
         log.append({
@@ -817,7 +803,7 @@ elif cmd.startswith("/bye"):
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": f"`!` Error processing /bye command: {e} `!`"
+            "text": f"`!` Ошибка обработки команды /bye: {e} `!`"
         })
 
 ###### /quit COMMAND #######
@@ -831,9 +817,9 @@ elif cmd.startswith("/quit"):
         # Format nickname using your markup style
         colored_nickname = f"`{nickname_color}{safe_username}`b"
         # Build message
-        base_text = f"{colored_nickname} has quit The Chat Room!"
+        base_text = f"{colored_nickname} вышел из Чата!"
         if user_message:
-            full_text = f" `!{base_text} Message: {user_message} `!"
+            full_text = f" `!{base_text} Сообщение: {user_message} `!"
         else:
             full_text = f" `!{base_text} `!"
         log.append({
@@ -847,7 +833,7 @@ elif cmd.startswith("/quit"):
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": f"`!` Error processing /quit command: {e} `!`"
+            "text": f"`!` Ошибка обработки команды /quit: {e} `!`"
         })
 
 ###### /exit COMMAND #######
@@ -861,9 +847,9 @@ elif cmd.startswith("/exit"):
         # Format nickname using your markup style
         colored_nickname = f"`{nickname_color}{safe_username}`b"
         # Build message
-        base_text = f"{colored_nickname} has left The Chat Room!"
+        base_text = f"{colored_nickname} покинул Чат!"
         if user_message:
-            full_text = f" `!{base_text} Message: {user_message} `!"
+            full_text = f" `!{base_text} Сообщение: {user_message} `!"
         else:
             full_text = f" `!{base_text} `!"
         log.append({
@@ -877,7 +863,7 @@ elif cmd.startswith("/exit"):
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": f"`!` Error processing /exit command: {e} `!`"
+            "text": f"`!` Ошибка обработки команды /exit: {e} `!`"
         })
 
 ###### /BRB COMMAND #######
@@ -891,9 +877,9 @@ elif cmd.startswith("/brb"):
         # Format nickname using your markup style
         colored_nickname = f"`{nickname_color}{safe_username}`b"
         # Build message
-        base_text = f"{colored_nickname} has left The Chat Room! I'LL BE RIGHT BACK! BRB!"
+        base_text = f"{colored_nickname} покинул Чат! СКОРО ВЕРНУСЬ! BRB!"
         if user_message:
-            full_text = f" `!{base_text} Message: {user_message} `!"
+            full_text = f" `!{base_text} Сообщение: {user_message} `!"
         else:
             full_text = f" `!{base_text} `!"
         log.append({
@@ -907,7 +893,7 @@ elif cmd.startswith("/brb"):
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": f"`!` Error processing /brb command: {e} `!`"
+            "text": f"`!` Ошибка обработки команды /brb: {e} `!`"
         })
 
 ###### /lol COMMAND #######
@@ -921,9 +907,9 @@ elif cmd.startswith("/lol"):
         # Format nickname using your markup style
         colored_nickname = f"`{nickname_color}{safe_username}`b"
         # Build message
-        base_text = f"{colored_nickname} is Laughing Out Loud! LOL! :D "
+        base_text = f"{colored_nickname} громко смеётся! LOL! :D "
         if user_message:
-            full_text = f" `!{base_text} Message: {user_message} `!"
+            full_text = f" `!{base_text} Сообщение: {user_message} `!"
         else:
             full_text = f" `!{base_text} `!"
         log.append({
@@ -937,7 +923,7 @@ elif cmd.startswith("/lol"):
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": f"`!` Error processing /lol command: {e} `!`"
+            "text": f"`!` Ошибка обработки команды /lol: {e} `!`"
         })
 
 ###### /away COMMAND #######
@@ -951,9 +937,9 @@ elif cmd.startswith("/away"):
         # Format nickname using your markup style
         colored_nickname = f"`{nickname_color}{safe_username}`b"
         # Build message
-        base_text = f"{colored_nickname} is away."
+        base_text = f"{colored_nickname} отсутствует."
         if user_message:
-            full_text = f" `!{base_text} (Status: {user_message}) `!"
+            full_text = f" `!{base_text} (Статус: {user_message}) `!"
         else:
             full_text = f" `!{base_text} `!"
         log.append({
@@ -967,7 +953,7 @@ elif cmd.startswith("/away"):
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": f"`!` Error processing /away command: {e} `!`"
+            "text": f"`!` Ошибка обработки команды /away: {e} `!`"
         })
 
 ###### /back COMMAND #######
@@ -981,7 +967,7 @@ elif cmd.startswith("/back"):
         # Format nickname using your markup style
         colored_nickname = f"`{nickname_color}{safe_username}`b"
         # Build message
-        base_text = f"{colored_nickname} is back! "
+        base_text = f"{colored_nickname} вернулся! "
         if user_message:
             full_text = f" `!{base_text} {user_message} `!"
         else:
@@ -997,7 +983,7 @@ elif cmd.startswith("/back"):
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": f"`!` Error processing /back command: {e} `!`"
+            "text": f"`!` Ошибка обработки команды /back: {e} `!`"
         })
 
 
@@ -1012,11 +998,11 @@ elif cmd.startswith("/welcome"):
         # Format nickname using your markup style
         colored_nickname = f"`{nickname_color}{safe_username}`b"
         # Build message
-        base_text = f"{colored_nickname} Welcomes "
+        base_text = f"{colored_nickname} приветствует "
         if user_message:
             full_text = f" `!{base_text} {user_message} `!"
         else:
-            full_text = f" `!{base_text} everyone! `!"
+            full_text = f" `!{base_text} всех! `!"
         log.append({
             "time": timestamp,
             "user": "System",
@@ -1028,7 +1014,7 @@ elif cmd.startswith("/welcome"):
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": f"`!` Error processing /welcome command: {e} `!`"
+            "text": f"`!` Ошибка обработки команды /welcome: {e} `!`"
         })
 
 ###### /notice COMMAND #######
@@ -1042,7 +1028,7 @@ elif cmd.startswith("/notice"):
         # Format nickname using your markup style
         colored_nickname = f"`{nickname_color}{safe_username}`b"
         # Build message
-        base_text = f"NOTICE FROM {colored_nickname}:"
+        base_text = f"УВЕДОМЛЕНИЕ ОТ {colored_nickname}:"
         if user_message:
             full_text = f" `!{base_text}  {user_message} `!"
         else:
@@ -1058,82 +1044,82 @@ elif cmd.startswith("/notice"):
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": f"`!` Error processing /notice command: {e} `!`"
+            "text": f"`!` Ошибка обработки команды /notice: {e} `!`"
         })
 
-####### METEO COMMAND #######
+####### КОМАНДА METEO #######
 elif cmd.startswith("/meteo"):
     try:
         from geopy.geocoders import Nominatim
         import requests
 
-        # Extract city name
+        # Извлечение названия города
         parts = cmd.split(" ", 1)
         city_name = parts[1].strip() if len(parts) > 1 else ""
         timestamp = time.strftime("[%a,%H:%M]")
 
         if not city_name:
-            raise ValueError("No city name provided. Example: /meteo New York")
+            raise ValueError("Название города не указано. Пример: /meteo Москва")
 
-        # Geolocation
+        # Геолокация
         geolocator = Nominatim(user_agent="weather_bot")
         location = geolocator.geocode(city_name)
         if not location:
-            raise ValueError(f"Could not find location for '{city_name}'.")
+            raise ValueError(f"Не удалось найти местоположение для '{city_name}'.")
 
         lat, lon = location.latitude, location.longitude
 
-        # Open-Meteo API call
+        # Вызов API Open-Meteo
         weather_url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true"
         response = requests.get(weather_url)
         data = response.json()
 
         if "current_weather" not in data:
-            raise ValueError("Weather data not available.")
+            raise ValueError("Данные о погоде недоступны.")
 
         temp = data["current_weather"]["temperature"]
         code = data["current_weather"]["weathercode"]
 
-        # Weather code mapping (no emojis)
+        # Сопоставление кодов погоды (без эмодзи)
         weather_codes = {
-            0: "Clear sky",
-            1: "Mainly clear",
-            2: "Partly cloudy",
-            3: "Overcast",
-            45: "Fog",
-            48: "Depositing rime fog",
-            51: "Light drizzle",
-            53: "Moderate drizzle",
-            55: "Dense drizzle",
-            56: "Light freezing drizzle",
-            57: "Dense freezing drizzle",
-            61: "Slight rain",
-            63: "Moderate rain",
-            65: "Heavy rain",
-            66: "Light freezing rain",
-            67: "Heavy freezing rain",
-            71: "Slight snow fall",
-            73: "Moderate snow fall",
-            75: "Heavy snow fall",
-            77: "Snow grains",
-            80: "Slight rain showers",
-            81: "Moderate rain showers",
-            82: "Violent rain showers",
-            85: "Slight snow showers",
-            86: "Heavy snow showers",
-            95: "Thunderstorm",
-            96: "Thunderstorm with slight hail",
-            99: "Thunderstorm with heavy hail"
+            0: "Ясное небо",
+            1: "В основном ясно",
+            2: "Переменная облачность",
+            3: "Пасмурно",
+            45: "Туман",
+            48: "Изморозь",
+            51: "Слабый моросящий дождь",
+            53: "Умеренный моросящий дождь",
+            55: "Сильный моросящий дождь",
+            56: "Слабый ледяной дождь",
+            57: "Сильный ледяной дождь",
+            61: "Слабый дождь",
+            63: "Умеренный дождь",
+            65: "Сильный дождь",
+            66: "Слабый ледяной дождь",
+            67: "Сильный ледяной дождь",
+            71: "Слабый снег",
+            73: "Умеренный снег",
+            75: "Сильный снег",
+            77: "Снежная крупа",
+            80: "Слабые ливни",
+            81: "Умеренные ливни",
+            82: "Сильные ливни",
+            85: "Слабые снежные ливни",
+            86: "Сильные снежные ливни",
+            95: "Гроза",
+            96: "Гроза со слабым градом",
+            99: "Гроза с сильным градом"
         }
 
-        description = weather_codes.get(code, "Unknown weather")
+        description = weather_codes.get(code, "Неизвестная погода")
 
-        # Format nickname
+        # Форматирование никнейма
         nickname_color = get_color(safe_username)
         colored_nickname = f"`{nickname_color}{safe_username}`b"
-        weather_text = f"Weather in {city_name}: {temp}C, {description}"
+        weather_text = f"Погода в {city_name}: {temp}°C, {description}"
 
-        full_text = f"Meteo Request from {colored_nickname}: {weather_text} "
+        full_text = f"Запрос погоды от {colored_nickname}: {weather_text} "
         log.append({
             "time": timestamp,
             "user": "Meteo",
@@ -1147,7 +1133,7 @@ elif cmd.startswith("/meteo"):
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": f"Error processing /meteo command: {e} "
+            "text": f"Ошибка обработки команды /meteo: {e} "
         })
 
 
@@ -1168,11 +1154,11 @@ elif raw_username and message and message.lower() != "null":
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": "System",
-            "text": f"Spam Detected! Message Blocked! Triggered by: '{trigger_word}'"
+            "text": f"Обнаружен спам! Сообщение заблокировано! Сработало на: '{trigger_word}'"
         })
-        debug.append(f" Spam blocked from '{safe_username}'")
+        debug.append(f" Спам заблокирован от '{safe_username}'")
     else:
-        # Normal message flow
+        # Обычный поток сообщений
         log.append({
             "time": time.strftime("[%a,%H:%M]"),
             "user": safe_username,
@@ -1181,16 +1167,16 @@ elif raw_username and message and message.lower() != "null":
         try:
             with open(log_file, "w") as f:
                 json.dump(log, f)
-            debug.append(f" Message by '{safe_username}' sent!")
+            debug.append(f" Сообщение от '{safe_username}' отправлено!")
         except Exception as e:
-            debug.append(f" Send error: {e}")
+            debug.append(f" Ошибка отправки: {e}")
 else:
-    debug.append(" Page Reloaded. Idle. Void Message. Waiting for user interactions. For extended commands info digit: /help")
+    debug.append(" Страница перезагружена. Простой. Пустое сообщение. Ожидание взаимодействия пользователя. Для расширенной информации о командах введите: /help")
 
 
 
 
-#########  Helper function to split long messages using MAX CHARS ######## 
+#########  Вспомогательная функция для разбиения длинных сообщений используя MAX CHARS ######## 
 def split_message(text, max_chars):
     words = text.split()
     lines = []
@@ -1205,7 +1191,7 @@ def split_message(text, max_chars):
         lines.append(current_line)
     return lines
 
-#########  dynamic ui displayed messages adaptation ######## 
+#########  динамическая адаптация отображаемых сообщений интерфейса ######## 
 def calculate_effective_limit(log, max_lines, max_chars):
     total_lines = 0
     effective_limit = 0
@@ -1222,40 +1208,40 @@ def calculate_effective_limit(log, max_lines, max_chars):
 effective_limit, total_lines = calculate_effective_limit(log, MAX_LINES, MAX_CHARS)
 
 
-########## UTC server time to local time dynamic conversion ########## 
+########## Динамическое преобразование времени сервера UTC в локальное время ########## 
 from datetime import datetime
 
 def convert_log_time_to_local(log_time_str):
-    # Parse log time - handle both [HH:MM] and [Day,HH:MM] formats
+    # Парсинг времени лога - обработка форматов [HH:MM] и [Day,HH:MM]
     log_time_str = log_time_str.strip("[]")
     
-    # Check if it has day of week prefix (with or without space after comma)
+    # Проверка наличия префикса дня недели (с пробелом или без после запятой)
     if "," in log_time_str:
-        # New timestamp format: [Tue,14:23] or [Tue, 14:23]
+        # Новый формат временной метки: [Tue,14:23] или [Tue, 14:23]
         parts = log_time_str.split(",")
         day_part = parts[0].strip()
         time_part = parts[1].strip()
     else:
-        # Old format: [14:23]
+        # Старый формат: [14:23]
         time_part = log_time_str
         day_part = None
     
-    # Get today's date
+    # Получить сегодняшнюю дату
     today = datetime.utcnow().date()
     
-    # Parse as UTC
+    # Парсинг как UTC
     utc_dt = datetime.strptime(f"{today} {time_part}", "%Y-%m-%d %H:%M")
     
-    # Get system's local timezone-aware datetime
+    # Получить локальное время системы с учётом часового пояса
     local_now = datetime.now().astimezone()
     
-    # Replace tzinfo of utc_dt with UTC, then convert to local timezone
+    # Заменить tzinfo utc_dt на UTC, затем преобразовать в локальный часовой пояс
     utc_dt = utc_dt.replace(tzinfo=local_now.tzinfo)
     local_dt = utc_dt.astimezone()
     
     return local_dt.strftime("%a,%H:%M")
 
-#########  mention users def logic on @user message ######## 
+#########  логика определения упоминаний пользователей в сообщениях @user ######## 
 def highlight_mentions_in_line(line, known_users):
     def replacer(match):
         nickname = match.group(1)
@@ -1263,25 +1249,25 @@ def highlight_mentions_in_line(line, known_users):
             color = get_color(nickname)
             return f"`!@`{color}{nickname}`b`!"
         else:
-            return f"@{nickname}"  # Leave uncolored
+            return f"@{nickname}"  # Оставить без цвета
     return re.sub(r"@(\w+)", replacer, line)
 
-######## $E FOR EMOTICONS ######## 
+######## $E ДЛЯ ЭМОТИКОНОВ ######## 
 with open(EMO_DB, "r", encoding="utf-8") as f:
     EMOTICONS = []
     for line in f:
         EMOTICONS.extend(line.strip().split())
-# $e catching for emoticons in messages
+# Перехват $e для эмотиконов в сообщениях
 def substitute_emoticons_in_line(line):
     return re.sub(r"\$e", lambda _: random.choice(EMOTICONS), line)
 
-######## LINK MENTIONS ######
+######## УПОМИНАНИЯ ССЫЛОК ######
 def format_links_in_line(line):
     def replacer(match):
         link = match.group(1)
         return f"`*`_`Fb9f`[{link}]`_`*`f` "
     
-    # Match `$link` followed by a space and then the actual link
+    # Сопоставление `$link` за которым следует пробел и затем фактическая ссылка
     return re.sub(r"\$link\s+([^\s]+)", replacer, line)
 
 ############################## Output UI template: ######################################
@@ -1294,40 +1280,40 @@ known_users = {msg["user"] for msg in log}
 safe_display_name = display_name.replace("`", "'")
 
 
-# RENDER UI:
+# ОТОБРАЖЕНИЕ ИНТЕРФЕЙСА:
 
-# Simple template for NomadNet compatibility
+# Простой шаблон для совместимости с NomadNet
 template = "---\n"
-template += f">`!{message_icon}  THE CHAT ROOM! {message_icon}  `F007` Powered by Reticulum NomadNet - IRC Style - Free Global Chat Room - Optimized for NomadNet - v2.00 `f`!\n"
+template += f">`!{message_icon}  THE CHAT ROOM! {message_icon}  `F007` Работает на Reticulum NomadNet - IRC стиль - Бесплатный глобальный чат - Оптимизировано для NomadNet - v2.00 `f`!\n"
 template += "---\n"
-template += f"`c`B000`Ff2e`!####### Room Topic: {topic_text} `! (Set by: {topic_author}, {topic_data.get('time')}) `! `!`f`b`a\n"
+template += f"`c`B000`Ff2e`!####### Тема комнаты: {topic_text} `! (Установлена: {topic_author}, {topic_data.get('time')}) `! `!`f`b`a\n"
 template += "---\n"
 
-# Simple chat display with all substitutions
+# Простое отображение чата со всеми подстановками
 for msg in log[-DISPLAY_LIMIT:]:
     message_lines = split_message(msg["text"], MAX_CHARS)
     color = get_color(msg["user"])
     
     for i, line in enumerate(message_lines):
-        # Apply substitutions for non-System messages
+        # Применение подстановок для сообщений не от System
         if msg["user"] != "System":
-            line = substitute_emoticons_in_line(line)  # Replace $e
-            line = highlight_mentions_in_line(line, known_users)  # Highlight @mentions
-            line = format_links_in_line(line)  # Format $link
+            line = substitute_emoticons_in_line(line)  # Замена $e
+            line = highlight_mentions_in_line(line, known_users)  # Выделение @упоминаний
+            line = format_links_in_line(line)  # Форматирование $link
         
         if i == 0:
-            # First line with timestamp and user
+            # Первая строка с временной меткой и пользователем
             template += f"\\{msg['time']} `{color}`!<{msg['user']}>`!`f`b {line}\n"
         else:
-            # Continuation lines
+            # Продолжающие строки
             template += f"\\{msg['time']} `{color}`!<{msg['user']}>`!`f`b {line}\n"
 
 
 template += "---\n"
-template += f"`B317 {user_icon} Nickname: `Baac`F000`<20|username`{safe_display_name}>`b`f `B317`_`[{nickset_icon} (Set/Update)`:/page/nomadnet.mu`username]`_`  {message_icon} Message: `Baac`F000`<87|message`>`b`f `B317`_`[{send_icon} Send Message`:/page/nomadnet.mu`username|message]`_` - `_`[Reload Page`:/page/nomadnet.mu`username]`_`\n"
+template += f"`B317 {user_icon} Никнейм: `Baac`F000`<20|username`{safe_display_name}>`b`f `B317`_`[{nickset_icon} (Установить/Обновить)`:/page/nomadnet.mu`username]`_`  {message_icon} Сообщение: `Baac`F000`<87|message`>`b`f `B317`_`[{send_icon} Отправить сообщение`:/page/nomadnet.mu`username|message]`_` - `_`[Перезагрузить страницу`:/page/nomadnet.mu`username]`_`\n"
 template += "---\n"
-template += f"`B216`Fddd` {cmd_icon} User Commands: /info, /stats, /users, /version, /lastseen, /topic, /search, /time, /ping, /meteo, /hi, /bye, /brb, /lol, /quit, /away,     ...For Full Command List, digit: /cmd `b`f\n"
-template += f"`B317`Feee` `!` {message_icon}  Total Messages: ({len(log)}) | {message_icon}  On Screen Messages: ({total_lines}) | {totmsg_icon}  `[Read Last 100`:/page/last100.mu]`  |  {totmsg_icon}  `[Read Full Chat Log (Slow)`:/page/fullchat.mu]`!  | `!`[{setup_icon}  User Settings (This function is not available yet, coming soon)`:/page/nomadnet.mu`username]`!`b`f"
+template += f"`B216`Fddd` {cmd_icon} Команды пользователя: /info, /stats, /users, /version, /lastseen, /topic, /search, /time, /ping, /meteo, /hi, /bye, /brb, /lol, /quit, /away,     ...Для полного списка команд введите: /cmd `b`f\n"
+template += f"`B317`Feee` `!` {message_icon}  Всего сообщений: ({len(log)}) | {message_icon}  Сообщений на экране: ({total_lines}) | {totmsg_icon}  `[Прочитать последние 100`:/page/last100.mu]`  |  {totmsg_icon}  `[Прочитать полный лог чата (Медленно)`:/page/fullchat.mu]`!  | `!`[{setup_icon}  Настройки пользователя (Эта функция пока недоступна, скоро)`:/page/nomadnet.mu`username]`!`b`f"
 template += "\n---\n"
 template += "---"
 print(template)

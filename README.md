@@ -1,184 +1,107 @@
-# 💬 **The Chat Room! v2.00** 💬
-
-An IRC-style chat room built for **Reticulum NomadNet**, optimized for **MeshChat v2.1+**. Made By F.
-
----
-
-## 🖼️ The Chat Room UI
-
-Screenshot from MeshChat index.mu page interface:
-
-<img width="1271" height="717" alt="index mu mod" src="https://github.com/user-attachments/assets/3f6d332a-c4e0-46f6-82ab-f9adb6090fd8" />
+# The Chat Room! RU-Edition
+IRC-стиль чата для **Reticulum NomadNet**, оптимизирован для **MeshChat v2.1+**. Автор: F. Переведено на русский Sudo-Ivan.
 
 ---
 
-## 🚀 Live Demo
+## Демо
 
-Experience the chatroom in action via the official NomadNet page:
+Официальная страница NomadNet:
 
-**NomadNet Page Link (MeshChat v2.1+ Optimized):**  `d251bfd8e30540b5bd219bbbfcc3afc5:/page/index.mu`
-
----
-
-# Informations
-
-Welcome to **THE CHATROOM** – v2.00 by F.  
-The first Reticulum/Nomadnet IRC-style chatroom, optimized for Nomadnet and Meshchat v2.x+.
-
-Born on v1 (beta) the 10 of August 2025. Enjoy!
-
-Stable v2.00 update: 01/10/2025
+**Ссылка на страницу NomadNet (оптимизировано для MeshChat v2.1+):**  `d251bfd8e30540b5bd219bbbfcc3afc5:/page/index.mu`
 
 ---
 
+## Информация
 
-# Table of Contents
+Добро пожаловать в **THE CHATROOM** – v2.00 от F.  
+Первый IRC-стиль чата для Reticulum/Nomadnet, оптимизирован для Nomadnet и Meshchat v2.x+.
 
-1. [💬 The Chat Room! v2.00](#-the-chat-room-v200)
-   - [🖼️ The Chat Room UI](#️-the-chat-room-ui)
-   - [🚀 Live Demo](#-live-demo)
+Создан в v1 (beta) 10 августа 2025.
 
-2. [📘 Informations](#informations)
-   - [Project Overview](#-project-overview)
-
-3. [🆘 Help Page](#-help-page)
-   - [🧰 Requirements](#-requirements)
-     - [✅ Built-in Modules](#-built-in-modules-no-installation-required)
-     - [🌐 Third-Party Libraries](#-third-party-libraries-install-via-pip)
-
-4. [⚙️ Installation](#️-installation)
-   - [📁 1. Download the Files](#-1-download-the-files)
-   - [📂 2. Copy Files to NomadNet Pages Directory](#-2-copy-files-to-nomadnet-pages-directory)
-   - [🔓 3. Make Files Executable](#-3-make-nomadnetmu-meshchatmu-and-other-python-pages-executable)
-   - [🚀 4. Launch NomadNet](#-4-launch-nomadnet)
-
-5. [⚙️ Technical Notes](#️-technical-notes)
-
-6. [💬 Commands Reference](#-commands-reference)
-   - [📘 General Info & Utility Commands](#-general-info--utility-commands)
-   - [🧠 Interactive Chat Commands](#-interactive-chat-commands)
-   - [🎭 Social Interaction Commands](#-social-interaction-commands)
-   - [👤 User Status Commands](#-user-status-commands)
-   - [🔒 Admin Commands](#-admin-commands-restricted-access)
-
-7. [Other Features](#other-features)
-   - [AntiSpam](#antispam)
-   - [Fixed UI Windows](#fixed-ui-windows)
-   - [NickName Color System](#nickname-color-system)
-   - [Nickname & LXMF Fingerprint Binding](#nickname--lxmf-fingerprint-binding-thanks-to-thomas)
-   - [Long Messages Split Function](#long-messages-split-function)
-   - [Statistics and Users Commands](#statistics-and-users-commands)
-
-8. [Next Work In Progress Features](#next-work-in-progress-features)
-   - [Personalized User Settings](#personalized-user-settings)
-   - [Administration Commands](#administration-commands)
-
-9. [Screenshots](#screenshots)
-   - [Screenshot from v1.45a](#screenshot-from-v145a)
-   - [Screenshots from v2.0](#screenshots-from-v20)
+Стабильная версия v2.00: 01/10/2025
 
 ---
 
+## Обзор проекта
 
-## 📘 Project Overview
+Скрипт страницы Nomadnet на Python для создания IRC-стиля чата.  
+Скопируйте файлы из релиза GitHub в папку `./nomadnetwork/storage/pages/`,  
+сделайте `nomadnet.mu` и `meshchat.mu` исполняемыми через `chmod +x` и запустите узел Nomadnet.
 
-This is a Python-based Nomadnet page script that creates a ready-to-run IRC-style chatroom.  
-Just copy all files from this GitHub release into your `./nomadnetwork/storage/pages/` folder,  
-make `nomadnet.mu` and `meshchat.mu`executable with `chmod +x`, and launch your Nomadnet node.
+- Децентрализованная mesh-сеть на базе NomadNetwork
+- Регистрация не требуется — выберите никнейм и начинайте общаться
+- Никнеймы автоматически окрашиваются и сохраняются между сессиями
+- Привязка никнейма к адресу LXMF через Fingerprint в Meshchat v2+ для сохранения и восстановления никнейма между сессиями (благодарность: **THOMAS**)
+- Построен на Python и компонентах Micron, JSON и SQL БД для чата, темы и сохранения никнеймов
+- Официальный скрипт чата размещён на VPS для стабильной работы
 
-Detailed installation info below.
+Демо:  `d251bfd8e30540b5bd219bbbfcc3afc5:/page/index.mu`  
 
-- 🌍 Decentralized mesh-based communication based on NomadNetwork
-- 🧑‍💻 No registration required—just choose a nickname and start chatting
-- 🎨 Nicknames are randomly colorized and persist across sessions (user settings personalization is coming soon!)
-- 🔒 Nickname to LXMF address binding, using the Fingerprint in Meshchat v2+ to save and recover the nickname across sessions
-  (THANKS TO: **THOMAS**)
-- 🛠️ Built with Python and Micron components, JSON and SQL DBs for chat, topic and nickname persistency
-- 🌐 Official chat script is Hosted on a VPS for stable uptime
-
-Live Demo:  `d251bfd8e30540b5bd219bbbfcc3afc5:/page/index.mu`  
-
-Official GitHub: [https://github.com/fr33n0w/thechatroom](https://github.com/fr33n0w/thechatroom)
+GitHub: [https://github.com/fr33n0w/thechatroom](https://github.com/fr33n0w/thechatroom)
 
 ---
 
----
-# 🆘 Help Page
+## Требования
 
-Welcome to the Help section! This guide outlines all the modules required to run this project, 
+Проект использует встроенные модули Python и сторонние библиотеки.
 
-along with setup instructions to get you started smoothly.
+### Встроенные модули (установка не требуется)
 
-## 🧰 Requirements
+| Модуль              | Назначение                                                          |
+|---------------------|---------------------------------------------------------------------|
+| `os`                | Работа с операционной системой (пути к файлам, переменные окружения)|
+| `sys`               | Доступ к системным параметрам и функциям                            |
+| `json`              | Парсинг и работа с JSON данными                                     |
+| `time`              | Операции со временем (задержки, временные метки)                    |
+| `random`            | Генерация случайных значений                                        |
+| `re`                | Сопоставление с регулярными выражениями                             |
+| `shutil`            | Высокоуровневые файловые операции (копирование, перемещение)       |
+| `collections`       | Специализированные структуры данных, например `Counter`            |
+| `datetime`          | Работа с датой и временем                                           |
 
-This project uses a combination of Python’s built-in modules and third-party libraries.
+### Сторонние библиотеки (установка через pip)
 
-### ✅ Built-in Modules (No installation required)
+| Пакет      | Назначение                                                          |
+|------------|---------------------------------------------------------------------|
+| `pytz`     | Определения и преобразования часовых поясов                        |
+| `requests` | Упрощённые HTTP запросы (нужно только для команды /meteo)           |
+| `geopy`    | Геолокационные сервисы (поиск адресов через Nominatim)              |
+| `sqlite3`  | Локальное хранение SQLite БД для привязки никнейма к LXMF           |
 
-These come bundled with Python and require no additional setup:
-
-| Module              | Purpose                                                                 |
-|---------------------|-------------------------------------------------------------------------|
-| `os`                | Interacts with the operating system (e.g., file paths, environment vars)|
-| `sys`               | Accesses system-specific parameters and functions                       |
-| `json`              | Parses and manipulates JSON data                                        |
-| `time`              | Handles time-based operations (e.g., delays, timestamps)                |
-| `random`            | Generates random values and selections                                  |
-| `re`                | Performs pattern matching with regular expressions                      |
-| `shutil`            | Performs high-level file operations (e.g., copying, moving files)       |
-| `collections`       | Provides specialized data structures like `Counter`                     |
-| `datetime`          | Manages date and time objects                                           |
-
-### 🌐 Third-Party Libraries (Install via pip)
-
-These must be installed manually:
-
-| Package     | Purpose                                                                 |
-|-------------|-------------------------------------------------------------------------|
-| `pytz`      | Timezone definitions and conversions                                    |
-| `requests`  | Simplified HTTP requests and API calls (needed for /meteo command only) |
-| `geopy`     | Geolocation services (e.g., address lookup via Nominatim, as above)     |
-| `sqlite3`   | Manages local SQLite database storage for Nickname to LXMF binding      |
-
-To install them, run:
+Установка:
 
 ```bash
 pip install pytz requests geopy sqlite3
 ```
 
-and of course, you need to install and configure NomadNet to host the page:
+Также необходимо установить и настроить NomadNet для размещения страницы:
 
 ```bash
 pip install nomadnet
 ```
 
-Tested and 100% working also with rns_server_pages by SebastianObi:
+Протестировано и работает с rns_server_pages от SebastianObi:
 https://github.com/SebastianObi/RNS-Tools/tree/main/rns_server_page
 
 ---
 
-## ⚙️ Installation
+## Установка
 
-Ready to deploy **THE CHATROOM** on your NomadNet node? Follow these steps to get it running in minutes:
+### 1. Скачать файлы
 
----
-
-### 📁 1. Download the Files
-
-Clone the repository or download the ZIP:
+Клонировать репозиторий или скачать ZIP:
 
 ```bash
-git clone https://github.com/fr33n0w/thechatroom.git
+git clone https://github.com/Sudo-Ivan/thechatroom.git
 ```
 
-### 📂 2. Copy Files to NomadNet Pages Directory
+### 2. Скопировать файлы в директорию страниц NomadNet
 
 ```bash
 cp -r thechatroom/* ~/.nomadnetwork/storage/pages/
-
 ```
 
-### 🔓 3. Make nomadnet.mu meshchat.mu and other python pages Executable
+### 3. Сделать файлы исполняемыми
 
 ```bash
 chmod +x ~/.nomadnetwork/storage/pages/nomadnet.mu
@@ -186,163 +109,135 @@ chmod +x ~/.nomadnetwork/storage/pages/meshchat.mu
 chmod +x ~/.nomadnetwork/storage/pages/fullchat.mu
 chmod +x ~/.nomadnetwork/storage/pages/last100.mu
 ```
-Also make sure your user has read and write permission for the json and db files to be correctly written and saved!
 
-### 🚀 4. Launch NomadNet
-Install and configure Nomadnet (or other nomadnet hosting page servers), after configuration:
+Убедитесь, что у пользователя есть права на чтение и запись для JSON и DB файлов.
+
+### 4. Запустить NomadNet
+
+Установите и настройте Nomadnet (или другой сервер страниц nomadnet), после настройки:
+
 ```bash
 nomadnet
 ```
 
-# DONE!
+Готово!
 
-Note: TheChatRoom has been created and run on root user machines, probably you need to be root to run it, let me know if you encounter some difficulties!
+Примечание: TheChatRoom создан и запускался на машинах с правами root, возможно потребуются права root для запуска.
 
-LXMF Contact: 0d051f3b6f844380c3e0c5d14e37fac8
----
-
----
-
-## ⚙️ Technical Notes
-
-Here are some important details about how **THE CHATROOM** works and what to expect:
-
-- 🔄 The chatroom does **not auto-refresh** due to Micron limitations  
-  → Use the **Reload buttons** that you find in the bottom menubar to view new messages  
-- 🧠 Nicknames can be stored using MeshChat’s **Fingerprint binding**
-  - Usage: press fingerprint button, set a nickname and reload the page. Nick is saved. 
-  → This allows nickname persistence across sessions (thanks to Thomas!)
-  - To recover the nickname on lost session cache, press fingerprint again and it will reappear automatically
-- 📜 The main chat view shows the **last 30 messages**  to fit MeshChat browser windows, you cn adjust the limit in the script
-  → Full logs are available via the **View Logs** button on the bottom menù
-- 🧪 The `/meteo` command uses external APIs  
-  → Requires `requests` and `geopy` to be installed  
-- 🧱 Built with Python and Micron components  
-  → Compatible with MeshChat v2.1+ and pure NomadNet client!  
-- 🧪 More Features will come soon! Stay Tuned! 
+LXMF Контакт: 0d051f3b6f844380c3e0c5d14e37fac8
 
 ---
 
----
+## Технические заметки
 
-## 💬 Commands Reference
-
-Here’s the full list of available commands in **THE CHATROOM**, grouped by category for easy reference:
-
----
-
-### 📘 General Info & Utility Commands
-
-| Command           | Description                                                                 |
-|-------------------|-----------------------------------------------------------------------------|
-| `/info`           | Show chatroom information, usage, and disclaimer                            |
-| `/cmd`            | Display all available user commands                                          |
-| `/stats`          | Show chatroom statistics, including Top 5 Chatters                          |
-| `/users`          | List all active chatroom users                                              |
-| `/version`        | Show script version, latest updates, and news                               |
+- Чат не обновляется автоматически из-за ограничений Micron  
+  → Используйте кнопки **Reload** в нижней панели меню для просмотра новых сообщений
+- Никнеймы можно сохранять через **Fingerprint binding** в MeshChat
+  - Использование: нажмите кнопку fingerprint, установите никнейм и перезагрузите страницу. Никнейм сохранён.
+  → Это позволяет сохранять никнейм между сессиями (благодарность Thomas!)
+  - Для восстановления никнейма при потере кэша сессии нажмите fingerprint снова, и он появится автоматически
+- Основной вид чата показывает **последние 30 сообщений** для соответствия окнам браузера MeshChat, можно настроить лимит в скрипте
+  → Полные логи доступны через кнопку **View Logs** в нижнем меню
+- Команда `/meteo` использует внешние API  
+  → Требует установки `requests` и `geopy`
+- Построен на Python и компонентах Micron  
+  → Совместим с MeshChat v2.1+ и чистым клиентом NomadNet
 
 ---
 
-### 🧠 Interactive Chat Commands
+## Справочник команд
 
-| Command                     | Description                                                                 |
-|-----------------------------|-----------------------------------------------------------------------------|
-| `/lastseen <nickname>`      | Show last seen info and latest message from a user                         |
-| `/topic` or `/topic <text>` | View or change the current room topic                                      |
-| `/search <keyword(s)>`      | Search for keywords in the full chat log                                   |
-| `/time`                     | Show current server time (UTC) and your local time                         |
-| `/ping`                     | Reply with PONG! to confirm chat system is active                          |
-| `/meteo <city>`             | Get weather info for a city (requires internet + API)                      |
+### Общие информационные и служебные команды
 
----
+| Команда    | Описание                                           |
+|------------|----------------------------------------------------|
+| `/info`    | Показать информацию о чате, использование и отказ  |
+| `/cmd`     | Показать все доступные команды пользователя        |
+| `/stats`   | Показать статистику чата, включая Топ-5 участников |
+| `/users`   | Список всех активных пользователей чата            |
+| `/version` | Показать версию скрипта, последние обновления      |
 
-### 🎭 Social Interaction Commands
+### Интерактивные команды чата
 
-| Command                     | Description                                                                 |
-|-----------------------------|-----------------------------------------------------------------------------|
-| `/e`                        | Send randomized emojis from the internal emoji list                         |
-| `/c <message>`              | Send a colored message with randomized background and font colors           |
-| `@nickname`                 | Mention a user with a colored highlight                                     |
-| `$e`                        | Insert a random emoticon anywhere in your message                           |
-| `/welcome` or `/welcome <nickname>` | Send a welcome message to the room or a specific user               |
+| Команда                     | Описание                                          |
+|-----------------------------|---------------------------------------------------|
+| `/lastseen <nickname>`      | Показать последнее появление и сообщение пользователя |
+| `/topic` или `/topic <text>` | Просмотр или изменение текущей темы комнаты      |
+| `/search <keyword(s)>`      | Поиск ключевых слов в полном логе чата            |
+| `/time`                     | Показать текущее время сервера (UTC) и локальное |
+| `/ping`                     | Ответить PONG! для подтверждения активности системы |
+| `/meteo <city>`             | Получить информацию о погоде для города (требует интернет + API) |
 
----
+### Команды социального взаимодействия
 
-### 👤 User Status Commands
+| Команда                     | Описание                                          |
+|-----------------------------|---------------------------------------------------|
+| `/e`                        | Отправить случайные эмодзи из внутреннего списка |
+| `/c <message>`              | Отправить цветное сообщение со случайными цветами фона и шрифта |
+| `@nickname`                 | Упомянуть пользователя с цветной подсветкой       |
+| `$e`                        | Вставить случайный эмотикон в любое место сообщения |
+| `/welcome` или `/welcome <nickname>` | Отправить приветственное сообщение в комнату или конкретному пользователю |
 
-| Command                     | Description                                                                 |
-|-----------------------------|-----------------------------------------------------------------------------|
-| `/hi`, `/bye`, `/brb`, `/lol`, `/exit`, `/quit`, `/away`, `/back`, `/notice` | Send status updates or reactions |
-| Example                     | `/hi Hello World!` — syntax works for all status commands                   |
+### Команды статуса пользователя
 
----
+| Команда                     | Описание                                          |
+|-----------------------------|---------------------------------------------------|
+| `/hi`, `/bye`, `/brb`, `/lol`, `/exit`, `/quit`, `/away`, `/back`, `/notice` | Отправить обновления статуса или реакции |
+| Пример                      | `/hi Hello World!` — синтаксис работает для всех команд статуса |
 
-### 🔒 Admin Commands (Restricted Access)
+### Административные команды (ограниченный доступ)
 
-> Only available to system administrators via `/admincmd`
+> Доступны только системным администраторам через `/admincmd`
 
-| Command                          | Description                                                             |
-|----------------------------------|-------------------------------------------------------------------------|
-| `/clear`                         | Delete the last message permanently                                     |
-| `/clear N`                       | Delete the last N messages, e.g. `/clear 3`                             |
-| `/clear user <nickname>`         | Delete all messages from a specific user                                |
-| `/clearall`                      | Clear the entire chat log and database (irreversible)                   |
-| `/backup`                        | Create a full `chat_log.json` backup in the script folder               |
+| Команда                  | Описание                                          |
+|--------------------------|---------------------------------------------------|
+| `/clear`                 | Удалить последнее сообщение навсегда             |
+| `/clear N`               | Удалить последние N сообщений, например `/clear 3` |
+| `/clear user <nickname>` | Удалить все сообщения от конкретного пользователя |
+| `/clearall`              | Очистить весь лог чата и базу данных (необратимо) |
+| `/backup`                | Создать полную резервную копию `chat_log.json` в папке скрипта |
 
----
-
-> ⚠️ Some commands require internet access or third-party libraries (`requests`, `geopy`).  
-> 🔐 Admin commands are protected and only executable by authorized users. (Edit SYSADMIN nickname in the script!!)
-
----
-
-## Other Features:
-
-### AntiSpam
-
-The ChatRoom! includes already a good list of antispam filters, based on single words or combined phrases. Add your own or remove the unwanted blocked words to make it less strict in spam_patterns lines section of the script. 
-
-## Fixed UI Windows
-The UI is fixed in place with DISPLAY_LIMIT var, limited to ~28 messages to fit the MeshChat 2.0+ Browser window.
-Same for the Nomadnet page with simpler approach to limit lines to ~36 
-Note: Long user messages are split into multiple lines and it can vary the size of the final rendered UI. 
-
-## NickName Color System
-Automatically color the user nickname for better readability, keeps it persistant for any message or command, same nick, same color, you can edit the default colors in the script.
-
-## Nickname & LXMF fingerprint binding (Thanks to Thomas!)
-Pressing the Fingerprint button on meshchat v2.1+ , you send your lxmf to the chat and the script will automatically bind the nickname and the lxmf address like a sort of autologin. on rejoining the chat, nickname will be automatically recovered. if the meshchat os variables are missing (in case of reboot for example), just press fingerprint again and based on your lxmf, your nickname will reappear again automatically. Nickname and corresponding LXMF address is saved in a sql db to be recovered.
-
-## Long messages split function
-On longer messages, they will automatically be split in multiple lines to keep persistant ui layout and format.
-
-## Statistics and users commands
-Show chat statistics, top chatters, total sent message per user, total users in chat (commands: /stats or /users)
-
+> Некоторые команды требуют доступа в интернет или сторонних библиотек (`requests`, `geopy`).  
+> Административные команды защищены и доступны только авторизованным пользователям. (Отредактируйте никнейм SYSADMIN в скрипте!!)
 
 ---
 
-## Next Work In Progress Features:
+## Дополнительные возможности
 
-### Personalized User Settings
-(eg. set your nickname color preferences, possibility to click nickname to share your lxmf address for private chat, remove your nick and lxmf binding, chat theme selection, ecc.)
+### Антиспам
 
-### Administration Commands
-(eg. Add or Remove multiple Administrators)
+The ChatRoom! включает список фильтров антиспама на основе отдельных слов или комбинаций фраз. Добавьте свои или удалите ненужные заблокированные слова в секции spam_patterns скрипта.
+
+### Фиксированные окна интерфейса
+
+Интерфейс фиксирован с помощью переменной DISPLAY_LIMIT, ограничен примерно 28 сообщениями для соответствия окну браузера MeshChat 2.0+.  
+То же для страницы Nomadnet с более простым подходом, ограничение строк примерно до 36.  
+Примечание: Длинные сообщения пользователей разбиваются на несколько строк, что может изменять размер финального интерфейса.
+
+### Система цветов никнеймов
+
+Автоматическое окрашивание никнейма пользователя для лучшей читаемости, сохраняется для любого сообщения или команды, один никнейм — один цвет. Можно редактировать цвета по умолчанию в скрипте.
+
+### Привязка никнейма к отпечатку LXMF (благодарность Thomas!)
+
+Нажав кнопку Fingerprint в meshchat v2.1+, вы отправляете свой lxmf в чат, и скрипт автоматически привяжет никнейм и адрес lxmf как автовход. При повторном входе в чат никнейм будет автоматически восстановлен. Если переменные окружения meshchat отсутствуют (например, после перезагрузки), просто нажмите fingerprint снова, и на основе вашего lxmf никнейм появится автоматически. Никнейм и соответствующий адрес LXMF сохраняются в SQL БД для восстановления.
+
+### Функция разбиения длинных сообщений
+
+Длинные сообщения автоматически разбиваются на несколько строк для сохранения постоянного макета и формата интерфейса.
+
+### Команды статистики и пользователей
+
+Показывают статистику чата, топ участников, общее количество отправленных сообщений на пользователя, общее количество пользователей в чате (команды: /stats или /users)
 
 ---
 
-# Screenshot from v1.45a:
+## Планируемые функции
 
-<img width="1316" height="851" alt="the chat room" src="https://github.com/user-attachments/assets/371dbcc7-16df-4420-bee8-ec546e3ade3d" />
+### Персонализированные настройки пользователя
 
-# Screenshots from v2.0:
+(например, установка предпочтений цвета никнейма, возможность кликнуть по никнейму для отправки адреса lxmf для приватного чата, удаление привязки никнейма и lxmf, выбор темы чата и т.д.)
 
-Index.mu Intro page for interface selection:
-<img width="1309" height="991" alt="index" src="https://github.com/user-attachments/assets/3ff32000-af9c-4d86-8f28-7458576e2e21" />
+### Команды администрирования
 
-Meshchat >v2.0+ UI Interface:
-<img width="1308" height="926" alt="meshchat" src="https://github.com/user-attachments/assets/656a607a-4b40-46cc-9103-118824d42a74" />
-
-NomadNet UI Interface:
-<img width="1493" height="899" alt="nomadnet" src="https://github.com/user-attachments/assets/51c7eb2c-e238-4c55-9bae-3ae39ced6073" />
+(например, добавление или удаление нескольких администраторов)
