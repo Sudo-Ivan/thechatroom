@@ -18,9 +18,9 @@ if not os.path.exists(DB_PATH):
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE users (
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             remote_identity TEXT,
-            dest TEXT,
+            dest TEXT UNIQUE NOT NULL,
             display_name TEXT
         );
     """)
@@ -274,14 +274,16 @@ safe_username = (
 
 # Функции темы чата
 topic_file = os.path.join(os.path.dirname(__file__), "topic.json")
+topic_data = {}
 try:
     with open(topic_file, "r") as tf:
         topic_data = json.load(tf)
         topic_text = topic_data.get("text", "Добро пожаловать в чат!")
         topic_author = topic_data.get("user", "System")
-except:
+except (IOError, json.JSONDecodeError, KeyError):
     topic_text = "Добро пожаловать в чат!"
     topic_author = "System"
+    topic_data = {}
 
 
 log_file = os.path.join(os.path.dirname(__file__), "chat_log.json")
@@ -549,7 +551,7 @@ elif cmd == "/time":
     try:
         import pytz, datetime
         user_time = datetime.datetime.now(pytz.timezone("Europe/Rome")).strftime("%Y-%m-%d %H:%M:%S")
-    except:
+    except (ImportError, AttributeError, OSError):
         user_time = "(Local time not available)"
     time_text = f"Server time: {server_time} // User time (Naples): {user_time}"
     log.append({"time": time.strftime("[%a,%H:%M]"), "user": "System", "text": time_text})
@@ -672,7 +674,6 @@ elif cmd == "/e":
             emojis = [line.strip() for line in f if line.strip()]
         
         if emojis and safe_username:
-            import random
             chosen = random.choice(emojis)
 
             # Treat emoji as a normal message
@@ -708,8 +709,6 @@ elif cmd.startswith("/c "):
     user_message = message[3:].strip().replace("`", "")  # Remove backticks to avoid formatting issues
 
     if user_message and safe_username:
-        import random, json
-
         def hex_brightness(hex_code):
             r = int(hex_code[0], 16)
             g = int(hex_code[1], 16)
@@ -1257,12 +1256,18 @@ def highlight_mentions_in_line(line, known_users):
     return re.sub(r"@(\w+)", replacer, line)
 
 ######## $E ДЛЯ ЭМОТИКОНОВ ######## 
-with open(EMO_DB, "r", encoding="utf-8") as f:
-    EMOTICONS = []
-    for line in f:
-        EMOTICONS.extend(line.strip().split())
+EMOTICONS = []
+try:
+    with open(EMO_DB, "r", encoding="utf-8") as f:
+        for line in f:
+            EMOTICONS.extend(line.strip().split())
+except (IOError, OSError):
+    EMOTICONS = [":)", ":(", ":D", ":P"]
+
 # $e catching for emoticons in messages
 def substitute_emoticons_in_line(line):
+    if not EMOTICONS:
+        return line
     return re.sub(r"\$e", lambda _: random.choice(EMOTICONS), line)
 
 ######## УПОМИНАНИЯ ССЫЛОК ######
