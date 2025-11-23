@@ -152,9 +152,9 @@ volumes:
 ### Управление контейнером
 
 ```bash
-docker-compose logs -f
-docker-compose restart
-docker-compose down
+docker compose logs -f
+docker compose restart
+docker compose down
 ```
 
 ---
