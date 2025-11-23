@@ -33,6 +33,4 @@
 
 
 
-
-
 `Bfff`F000 Исходный код на GitHub: https://github.com/Sudo-Ivan/thechatroom `b
