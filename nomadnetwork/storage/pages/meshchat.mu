@@ -163,14 +163,6 @@ if not dest and len(sys.argv) > 3:
 hash_code = remote_identity[-4:] if remote_identity else ""
 dest_code = dest[-4:] if dest else ""
 
-# Умный резервный вариант для отображаемого имени с логированием
-if nickname:
-    display_name = nickname
-elif dest:
-    display_name = f"Guest_{dest_code}"
-else:
-    display_name = "Guest"
-
 # Привязка никнейма к SQL БД и восстановление
 
 def init_db():
@@ -215,11 +207,6 @@ def save_user_to_db(remote_identity, dest, display_name):
 # Initialize DB
 init_db()
 
-# Get environment variables
-nickname = os.getenv("field_username", "").strip()
-dest = os.getenv("dest", "").strip()
-remote_identity = os.getenv("remote_identity", "").strip()
-
 # Try to load display_name from DB
 db_display_name = get_display_name_from_db(dest)
 
@@ -256,8 +243,9 @@ else:
         "text": "`!` Никнейм или отпечаток не найдены. Используется по умолчанию: Guest `!`"
     })
 
-# Сохранение пользователя в БД если валидно
-save_user_to_db(remote_identity, dest, display_name)
+# Сохранение пользователя в БД если валидно (только если nickname был предоставлен)
+if nickname and remote_identity and dest:
+    save_user_to_db(remote_identity, dest, display_name)
 
 # -----------------------------------------------
 
