@@ -1305,7 +1305,7 @@ template += "-"
 safe_display_name = display_name.replace("`", "'")
 
 template += f"\n>`!` {user_icon} Никнейм: `Baac`F000`<12|username`{safe_display_name}>`!`b`[{nickset_icon} `:/page/meshchat.mu`username]`!   {message_icon}  Сообщение: `Baac`<52|message`>`b`!"
-template += f" `!`[{send_icon}  Отправить сообщение`:/page/meshchat.mu`username|message]`! | `!`[{reload_icon} Перезагрузить`:/page/meshchat.mu`username]`!\n"
+template += f" `!`[{send_icon}  Отправить сообщение`:/page/meshchat.mu`message]`! | `!`[{reload_icon} Перезагрузить`:/page/meshchat.mu]`!\n"
 
 
 template += "-\n"

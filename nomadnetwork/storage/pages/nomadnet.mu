@@ -1302,7 +1302,7 @@ for msg in log[-DISPLAY_LIMIT:]:
 
 
 template += "---\n"
-template += f"`B317 {user_icon} Никнейм: `Baac`F000`<20|username`{safe_display_name}>`b`f `B317`_`[{nickset_icon} (Установить/Обновить)`:/page/nomadnet.mu`username]`_`  {message_icon} Сообщение: `Baac`F000`<87|message`>`b`f `B317`_`[{send_icon} Отправить сообщение`:/page/nomadnet.mu`username|message]`_` - `_`[Перезагрузить страницу`:/page/nomadnet.mu`username]`_`\n"
+template += f"`B317 {user_icon} Никнейм: `Baac`F000`<20|username`{safe_display_name}>`b`f `B317`_`[{nickset_icon} (Установить/Обновить)`:/page/nomadnet.mu`username]`_`  {message_icon} Сообщение: `Baac`F000`<87|message`>`b`f `B317`_`[{send_icon} Отправить сообщение`:/page/nomadnet.mu`message]`_` - `_`[Перезагрузить страницу`:/page/nomadnet.mu]`_`\n"
 template += "---\n"
 template += f"`B216`Fddd` {cmd_icon} Команды пользователя: /info, /stats, /users, /version, /lastseen, /topic, /search, /time, /ping, /meteo, /hi, /bye, /brb, /lol, /quit, /away,     ...Для полного списка команд введите: /cmd `b`f\n"
 template += f"`B317`Feee` `!` {message_icon}  Всего сообщений: ({len(log)}) | {message_icon}  Сообщений на экране: ({total_lines}) | {totmsg_icon}  `[Прочитать последние 100`:/page/last100.mu]`  |  {totmsg_icon}  `[Прочитать полный лог чата (Медленно)`:/page/fullchat.mu]`!  | `!`[{setup_icon}  Настройки пользователя (Эта функция пока недоступна, скоро)`:/page/nomadnet.mu`username]`!`b`f"
