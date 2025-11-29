@@ -190,8 +190,8 @@ def get_display_name_from_db(dest):
     return result[0] if result else None
 
 def save_user_to_db(remote_identity, dest, display_name):
-    if not remote_identity or not dest:
-        return  # Don't save if required info is missing
+    if not dest or not display_name:
+        return
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("""
@@ -243,8 +243,8 @@ else:
         "text": "`!` Никнейм или отпечаток не найдены. Используется по умолчанию: Guest `!`"
     })
 
-# Сохранение пользователя в БД если валидно (только если nickname был предоставлен)
-if nickname and remote_identity and dest:
+# Сохранение пользователя в БД если валидно
+if dest and display_name and not display_name.startswith("Guest"):
     save_user_to_db(remote_identity, dest, display_name)
 
 # -----------------------------------------------
