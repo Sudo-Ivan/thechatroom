@@ -176,39 +176,39 @@ else:
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
+    # Create new table for identity-based lookups
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            remote_identity TEXT,
-            dest TEXT UNIQUE NOT NULL,
-            display_name TEXT
+        CREATE TABLE IF NOT EXISTS rns_users (
+            remote_identity TEXT PRIMARY KEY,
+            display_name TEXT,
+            last_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
     conn.commit()
     conn.close()
 
-def get_display_name_from_db(dest):
-    if not dest:
+def get_display_name_from_db(remote_identity):
+    if not remote_identity:
         return None
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute("SELECT display_name FROM users WHERE dest = ?", (dest,))
+    cursor.execute("SELECT display_name FROM rns_users WHERE remote_identity = ?", (remote_identity,))
     result = cursor.fetchone()
     conn.close()
     return result[0] if result else None
 
-def save_user_to_db(remote_identity, dest, display_name):
-    if not remote_identity or not dest:
+def save_user_to_db(remote_identity, display_name):
+    if not remote_identity:
         return  # Don't save if required info is missing
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO users (remote_identity, dest, display_name)
-        VALUES (?, ?, ?)
-        ON CONFLICT(dest) DO UPDATE SET
-            remote_identity = excluded.remote_identity,
-            display_name = excluded.display_name
-    """, (remote_identity, dest, display_name))
+        INSERT INTO rns_users (remote_identity, display_name)
+        VALUES (?, ?)
+        ON CONFLICT(remote_identity) DO UPDATE SET
+            display_name = excluded.display_name,
+            last_seen = CURRENT_TIMESTAMP
+    """, (remote_identity, display_name))
     conn.commit()
     conn.close()
 
@@ -221,7 +221,7 @@ dest = os.getenv("dest", "").strip()
 remote_identity = os.getenv("remote_identity", "").strip()
 
 # Try to load display_name from DB
-db_display_name = get_display_name_from_db(dest)
+db_display_name = get_display_name_from_db(remote_identity)
 
 # Определение финального display_name с логированием
 nickname_recovered_from_db = False
@@ -241,8 +241,8 @@ elif db_display_name:
         "user": "System",
         "text": f"`!` Никнейм восстановлен из базы данных: {display_name} `!`"
     })
-elif dest:
-    display_name = f"Guest_{dest[-4:]}"
+elif remote_identity:
+    display_name = f"Guest_{remote_identity[:4]}"
     log.append({
         "time": time.strftime("[%a,%H:%M]"),
         "user": "System",
@@ -257,7 +257,7 @@ else:
     })
 
 # Сохранение пользователя в БД если валидно
-save_user_to_db(remote_identity, dest, display_name)
+save_user_to_db(remote_identity, display_name)
 
 # -----------------------------------------------
 
@@ -1288,7 +1288,7 @@ safe_display_name = display_name.replace("`", "'")
 
 # Простой шаблон для совместимости с NomadNet
 template = "---\n"
-template += f">`!{message_icon}  THE CHAT ROOM! {message_icon}  `F007` Работает на Reticulum NomadNet - IRC стиль - Бесплатный глобальный чат - Оптимизировано для NomadNet - v2.00 `f`!\n"
+template += f">`! RU Chat  `F007` Работает на Reticulum NomadNet - IRC стиль - Бесплатный глобальный чат - Оптимизировано для NomadNet - v2.00 `f`!\n"
 template += "---\n"
 template += f"`c`B000`Ff2e`!####### Тема комнаты: {topic_text} `! (Установлена: {topic_author}, {topic_data.get('time')}) `! `!`f`b`a\n"
 template += "---\n"
